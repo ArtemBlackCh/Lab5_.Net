@@ -1,0 +1,20 @@
+﻿using System.IO;
+using System.Text.Json;
+
+namespace laba5
+{
+    public class JsonFileWriter : IFileSaver
+    {
+        public async Task SaveAsync<T>(string filePath, List<T> data)
+        {
+            string? directoryPath = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+
+            await File.WriteAllTextAsync(filePath, json);
+        }
+    }
+}
